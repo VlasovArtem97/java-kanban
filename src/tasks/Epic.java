@@ -14,6 +14,10 @@ public class Epic extends Task {
         return subTasks;
     }
 
+    public void deleteSubTasks() {
+        subTasks.clear();
+    }
+
     public void updateStatusEpic() {
         if (subTasks.isEmpty()) {
             setStatus(Status.NEW);
