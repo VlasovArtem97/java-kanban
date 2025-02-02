@@ -12,6 +12,17 @@ public class Task {
         this.status = status;
     }
 
+    private Task(int id, String task, String details, Status status) {
+        this.id = id;
+        this.task = task;
+        this.details = details;
+        this.status = status;
+    }
+
+    public Task getShapShot() {
+        return new Task(this.id, this.task, this.details, this.status);
+    }
+
     public int getId() {
         return id;
     }
@@ -26,6 +37,14 @@ public class Task {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public String getTask() {
+        return task;
+    }
+
+    public String getDetails() {
+        return details;
     }
 
     @Override
