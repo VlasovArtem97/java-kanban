@@ -27,17 +27,17 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<Task> getListTask() { // Метод получения Task листа
+    public List<Task> getListTask() { // Метод получения Task листа
         return new ArrayList<>(tasks.values());
     }
 
     @Override
-    public ArrayList<Epic> getListEpic() { // Метод получения Epic листа
+    public List<Epic> getListEpic() { // Метод получения Epic листа
         return new ArrayList<>(epics.values());
     }
 
     @Override
-    public ArrayList<SubTask> getListSubTask() { // Метод получения SubTask листа
+    public List<SubTask> getListSubTask() { // Метод получения SubTask листа
         return new ArrayList<>(subTasks.values());
     }
 
@@ -164,7 +164,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<SubTask> allSubTaskByEpic(int epicID) { // Метод получения SubTask определенного Epic
+    public List<SubTask> allSubTaskByEpic(int epicID) { // Метод получения SubTask определенного Epic
         ArrayList<SubTask> subTasksByEpic = new ArrayList<>();
         if (epics.containsKey(epicID)) {
             for (SubTask subTask : subTasks.values()) {
