@@ -19,10 +19,6 @@ public class Task {
         this.status = status;
     }
 
-    public Task getShapShot() {
-        return new Task(this.id, this.task, this.details, this.status);
-    }
-
     public int getId() {
         return id;
     }

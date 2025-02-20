@@ -32,7 +32,7 @@ class InMemoryTaskManagerTest {
     void testInMemoryTaskManagerAddsAndFindsTasksById() { // Тест-метод по получению Task задачи по id
         Task task = taskManager.getTaskId(task1.getId());
         Assertions.assertNotNull(task, "Task задача не добавлена в Manager");
-        Assertions.assertTrue(task1.equals(task), "Задача не добавлена в менеджер и ее нельзя найти по id");
+        Assertions.assertEquals(task1, task, "Задача не добавлена в менеджер и ее нельзя найти по id");
     }
 
     @Test
