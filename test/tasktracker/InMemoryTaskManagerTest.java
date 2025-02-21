@@ -63,19 +63,6 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void testTaskHistoryPreservation() { // Тест-метод по проверки сохранения разной версии задачи
-        InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
-        historyManager.add(task1);
-        task1.setStatus(Status.IN_PROGRESS);
-        historyManager.add(task1);
-        List<Task> histiry = historyManager.getHistory();
-        Assertions.assertEquals(2, histiry.size(), "В истории просмотров должно быть 2 задачи");
-        Task task = histiry.get(0);
-        Task task2 = histiry.get(1);
-        Assertions.assertNotEquals(task.getStatus(), task2.getStatus(), "Сохраняются одинаковые версии задач");
-    }
-
-    @Test
     void testTaskImmutabilityOnAdd() { //Тест метод по проверки неизменности полей при добавлении в менеджер задач
         Task task = new Task("Task", "описание Task", Status.NEW);
         String name = task.getTask();

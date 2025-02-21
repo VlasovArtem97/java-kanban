@@ -62,5 +62,4 @@ class InMemoryHistoryManagerTest {
         List<Task> history2 = historyManager.getHistory();
         Assertions.assertEquals(5, history2.size(), "Размер истории просмотров должен быть равен 5");
     }
-
 }
