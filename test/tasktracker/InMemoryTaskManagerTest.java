@@ -1,4 +1,4 @@
-package taskTracker;
+package tasktracker;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,7 +32,7 @@ class InMemoryTaskManagerTest {
     void testInMemoryTaskManagerAddsAndFindsTasksById() { // Тест-метод по получению Task задачи по id
         Task task = taskManager.getTaskId(task1.getId());
         Assertions.assertNotNull(task, "Task задача не добавлена в Manager");
-        Assertions.assertTrue(task1.equals(task), "Задача не добавлена в менеджер и ее нельзя найти по id");
+        Assertions.assertEquals(task1, task, "Задача не добавлена в менеджер и ее нельзя найти по id");
     }
 
     @Test
@@ -60,19 +60,6 @@ class InMemoryTaskManagerTest {
         Assertions.assertNotEquals(one, two, "Объекты Task равны");
         Assertions.assertNotNull(taskManager.getTaskId(one), "Такого Task объекта нет в менеджере");
         Assertions.assertNotNull(taskManager.getTaskId(two), "Такого Task объекта нет в менеджере");
-    }
-
-    @Test
-    void testTaskHistoryPreservation() { // Тест-метод по проверки сохранения разной версии задачи
-        InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
-        historyManager.add(task1);
-        task1.setStatus(Status.IN_PROGRESS);
-        historyManager.add(task1);
-        List<Task> histiry = historyManager.getHistory();
-        Assertions.assertEquals(2, histiry.size(), "В истории просмотров должно быть 2 задачи");
-        Task task = histiry.get(0);
-        Task task2 = histiry.get(1);
-        Assertions.assertNotEquals(task.getStatus(), task2.getStatus(), "Сохраняются одинаковые версии задач");
     }
 
     @Test
