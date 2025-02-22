@@ -43,7 +43,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteAllTask() { // Метод удаления всего Task листа
-        for (Integer task : tasks.keySet()){
+        for (Integer task : tasks.keySet()) {
             historyManager.remove(task);
         }
         tasks.clear();
@@ -51,10 +51,10 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteAllEpic() { // Метод удаления всего Epic листа
-        for (Integer task : epics.keySet()){
+        for (Integer task : epics.keySet()) {
             historyManager.remove(task);
         }
-        for (Integer task : subTasks.keySet()){
+        for (Integer task : subTasks.keySet()) {
             historyManager.remove(task);
         }
         epics.clear();
@@ -67,7 +67,7 @@ public class InMemoryTaskManager implements TaskManager {
             epic.deleteSubTasks();
             epic.updateStatusEpic();
         }
-        for (Integer task : subTasks.keySet()){
+        for (Integer task : subTasks.keySet()) {
             historyManager.remove(task);
         }
         subTasks.clear();
