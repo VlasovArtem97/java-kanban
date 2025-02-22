@@ -10,9 +10,12 @@ public class Main {
     public static void main(String[] args) {
         TaskManager taskManager = Managers.getDefault();
 
+        Task task1 = new Task("Задача Task 1", "Описание задачи Task 1", Status.NEW);
+
         Epic epic1 = new Epic("Epic 1", "Описание 1 Epic задачи");
         Epic epic2 = new Epic("Epic 2", "Описание 2 Epic задачи");
 
+        taskManager.addTask(task1);
         taskManager.addEpic(epic1);
         taskManager.addEpic(epic2);
 
