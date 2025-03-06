@@ -3,8 +3,8 @@ package tasks;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import taskTracker.Managers;
-import taskTracker.TaskManager;
+import tasktracker.Managers;
+import tasktracker.TaskManager;
 
 class SubTaskTest {
 
