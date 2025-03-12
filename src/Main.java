@@ -1,48 +1,49 @@
-import tasks.Status;
-import tasktracker.Managers;
-import tasktracker.TaskManager;
 import tasks.Epic;
+import tasks.Status;
 import tasks.SubTask;
 import tasks.Task;
+import tasktracker.ManagerSaveException;
+import tasktracker.Managers;
+import tasktracker.TaskManager;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class Main {
+    private static final String LOCATION = "C:\\Users\\wwwte\\IdeaProjects\\java-kanban\\src\\resources\\tasks.csv";
 
     public static void main(String[] args) {
-        TaskManager taskManager = Managers.getDefault();
 
-        Task task1 = new Task("Задача Task 1", "Описание задачи Task 1", Status.NEW);
+        try {
+            File file = Files.createFile(Paths.get(LOCATION)).toFile();
+//            File file = Paths.get(LOCATION).toFile();
+            TaskManager taskManager = Managers.getDefault(file);
 
-        Epic epic1 = new Epic("Epic 1", "Описание 1 Epic задачи");
-        Epic epic2 = new Epic("Epic 2", "Описание 2 Epic задачи");
+            Task task1 = new Task("Задача Task 1", "Описание задачи Task 1", Status.NEW);
+            Epic epic1 = new Epic("Epic 1", "Описание 1 Epic задачи");
+            Epic epic2 = new Epic("Epic 2", "Описание 2 Epic задачи");
 
-        taskManager.addTask(task1);
-        taskManager.addEpic(epic1);
-        taskManager.addEpic(epic2);
+            taskManager.addTask(task1);
+            taskManager.addEpic(epic1);
+            taskManager.addEpic(epic2);
 
-        SubTask subTask1 = new SubTask("SubTask 1", "Описание subTask 1", epic1.getId());
-        SubTask subTask2 = new SubTask("SubTask 2", "Описание subTask 2", epic1.getId());
-        SubTask subTask3 = new SubTask("SubTask 3", "Описание subTask 3", epic1.getId());
+            SubTask subTask1 = new SubTask("SubTask 1", "Описание subTask 1", epic1.getId());
+            SubTask subTask2 = new SubTask("SubTask 2", "Описание subTask 2", epic1.getId());
+            SubTask subTask3 = new SubTask("SubTask 3", "Описание subTask 3", epic1.getId());
 
-        taskManager.addSubTask(subTask1);
-        taskManager.addSubTask(subTask2);
-        taskManager.addSubTask(subTask3);
+            taskManager.addSubTask(subTask1);
+            taskManager.addSubTask(subTask2);
+            taskManager.addSubTask(subTask3);
 
-        System.out.println(taskManager.getEpicId(epic1.getId()));
-        System.out.println(taskManager.getEpicId(epic2.getId()));
-        System.out.println(taskManager.getSubTaskId(subTask1.getId()));
-        System.out.println(taskManager.getSubTaskId(subTask2.getId()));
-        System.out.println(taskManager.getSubTaskId(subTask3.getId()));
-        System.out.println(taskManager.getSubTaskId(subTask1.getId()));
-        System.out.println(taskManager.getEpicId(epic2.getId()));
-        System.out.println(taskManager.getSubTaskId(subTask3.getId()));
-        System.out.println("\n");
-        System.out.println(taskManager.getHistory());
-        System.out.println("\n");
-        taskManager.deletedSubTaskById(subTask1.getId());
-        System.out.println(taskManager.getHistory());
-        System.out.println("\n");
-        taskManager.deletedEpicById(epic1.getId());
-        System.out.println(taskManager.getHistory());
+            printAllTasks(taskManager);
+
+        } catch (IOException e) {
+            System.out.println("Файл уже создан");
+        } catch (ManagerSaveException e) {
+            System.out.println("Требуется перезагрузка");
+        }
     }
 
     private static void printAllTasks(TaskManager manager) {

@@ -1,5 +1,7 @@
 package tasks;
 
+import tasktracker.TypeTask;
+
 public class Task {
     protected final String task;
     protected final String details;
@@ -41,6 +43,10 @@ public class Task {
 
     public String getDetails() {
         return details;
+    }
+
+    public TypeTask getTypeTask() {
+        return TypeTask.TASK;
     }
 
     @Override

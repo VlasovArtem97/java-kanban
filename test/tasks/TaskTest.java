@@ -3,8 +3,11 @@ package tasks;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tasktracker.ManagerSaveException;
 import tasktracker.Managers;
 import tasktracker.TaskManager;
+
+import java.io.IOException;
 
 class TaskTest {
 
@@ -16,7 +19,7 @@ class TaskTest {
     }
 
     @Test
-    void shouldCompareTaskObjectsById() { // Тест метод по сравнению Task объектов
+    void shouldCompareTaskObjectsById() throws IOException, ManagerSaveException { // Тест метод по сравнению Task объектов
         Task task1 = new Task("Задача 1", "Описание задачи 1", Status.NEW);
         taskManager.addTask(task1);
         Task task2 = new Task("Задача 2", "Описание задачи 2", Status.NEW);

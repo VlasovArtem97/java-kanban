@@ -1,5 +1,7 @@
 package tasks;
 
+import tasktracker.TypeTask;
+
 import java.util.ArrayList;
 
 public class Epic extends Task {
@@ -42,6 +44,11 @@ public class Epic extends Task {
         } else {
             setStatus(Status.NEW);
         }
+    }
+
+    @Override
+    public TypeTask getTypeTask() {
+        return TypeTask.EPIC;
     }
 
     @Override

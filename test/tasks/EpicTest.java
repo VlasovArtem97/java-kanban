@@ -3,8 +3,11 @@ package tasks;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tasktracker.ManagerSaveException;
 import tasktracker.Managers;
 import tasktracker.TaskManager;
+
+import java.io.IOException;
 
 class EpicTest {
 
@@ -13,7 +16,7 @@ class EpicTest {
     private static Epic epic2;
 
     @BeforeEach
-    void beforeEach() { // Тест-метод в котором мы перед началом каждого теста объявляем объекты и добавляем в менеджер
+    void beforeEach() throws IOException, ManagerSaveException { // Тест-метод в котором мы перед началом каждого теста объявляем объекты и добавляем в менеджер
         taskManager = Managers.getDefault();
         epic1 = new Epic("Задача 1", "Описание задачи 1");
         taskManager.addEpic(epic1);

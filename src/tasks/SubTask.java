@@ -1,5 +1,7 @@
 package tasks;
 
+import tasktracker.TypeTask;
+
 public class SubTask extends Task {
 
     private final int epicId;
@@ -11,6 +13,11 @@ public class SubTask extends Task {
 
     public int getEpicId() {
         return epicId;
+    }
+
+    @Override
+    public TypeTask getTypeTask() {
+        return TypeTask.SUBTASK;
     }
 
     @Override
