@@ -2,11 +2,17 @@ package tasks;
 
 import tasktracker.TypeTask;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 public class Task {
     protected final String task;
     protected final String details;
     protected int id;
     protected Status status;
+    protected Duration duration;
+    protected LocalDateTime startTime;
+
 
     public Task(String task, String details, Status status) {
         this.task = task;
@@ -19,6 +25,26 @@ public class Task {
         this.task = task;
         this.details = details;
         this.status = status;
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return startTime.plus(duration);
     }
 
     public int getId() {
