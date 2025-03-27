@@ -1,5 +1,6 @@
 package tasktracker;
 
+import exceptions.ManagerSaveException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,6 +9,7 @@ import tasks.Status;
 import tasks.SubTask;
 import tasks.Task;
 
+import java.io.IOException;
 import java.util.List;
 
 class InMemoryHistoryManagerTest {
@@ -21,7 +23,7 @@ class InMemoryHistoryManagerTest {
     private static TaskManager taskManager;
 
     @BeforeEach
-    void beforeEach() {  //Тест-метод в котором мы перед началом каждого теста инициализируем объекты
+    void beforeEach() throws IOException, ManagerSaveException {  //Тест-метод в котором мы перед началом каждого теста инициализируем объекты
         historyManager = Managers.getDefaultHistory();
         taskManager = new InMemoryTaskManager();
         task1 = new Task("Задача Task 1", "Описание задачи Task 1", Status.NEW);

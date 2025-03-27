@@ -1,9 +1,11 @@
 package tasktracker;
 
+import exceptions.ManagerSaveException;
 import tasks.Epic;
 import tasks.SubTask;
 import tasks.Task;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface TaskManager {
@@ -28,11 +30,11 @@ public interface TaskManager {
 
     SubTask getSubTaskId(int id);
 
-    void addTask(Task task);
+    void addTask(Task task) throws IOException, ManagerSaveException;
 
-    void addEpic(Epic epic);
+    void addEpic(Epic epic) throws IOException, ManagerSaveException;
 
-    void addSubTask(SubTask subTask);
+    void addSubTask(SubTask subTask) throws IOException, ManagerSaveException;
 
     void updateTask(Task task);
 
