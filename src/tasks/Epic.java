@@ -18,7 +18,7 @@ public class Epic extends Task {
     }
 
     public void updateEpicEndTime() {
-        if(subTasks.isEmpty()) {
+        if (subTasks.isEmpty()) {
             this.startTime = null;
             this.endTime = null;
             this.duration = Duration.ZERO;
@@ -31,12 +31,11 @@ public class Epic extends Task {
 
     @Override
     public Duration getDuration() {
-        if(this.startTime != null && this.endTime != null) {
+        if (this.startTime != null && this.endTime != null) {
             return Duration.between(this.startTime, this.endTime);
         }
         return Duration.ZERO;
     }
-
 
     @Override
     public LocalDateTime getStartTime() {
@@ -46,7 +45,6 @@ public class Epic extends Task {
                 .min(LocalDateTime::compareTo)
                 .orElse(null);
     }
-
 
     @Override
     public LocalDateTime getEndTime() {
@@ -70,7 +68,7 @@ public class Epic extends Task {
     }
 
     public void updateStatusEpic() {
-        if(subTasks.isEmpty()) {
+        if (subTasks.isEmpty()) {
             setStatus(Status.NEW);
         }
 
@@ -78,7 +76,7 @@ public class Epic extends Task {
         boolean inProgress = false;
 
         for (SubTask subTask : subTasks) {
-            if(subTask.getStatus() == Status.NEW) {
+            if (subTask.getStatus() == Status.NEW) {
                 allDone = false;
             } else if (subTask.getStatus() == Status.IN_PROGRESS) {
                 allDone = false;

@@ -43,7 +43,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-
     public static FileBackedTaskManager loadFromFile(File file) {
         final FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(file);
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
@@ -192,7 +191,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             System.out.println("Не удается добавить SubTask задачу в hashMap: " + e.getMessage());
         }
     }
-
 
     @Override
     public void deleteAllTask() {

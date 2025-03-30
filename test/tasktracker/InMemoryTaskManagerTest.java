@@ -86,5 +86,4 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
         Assertions.assertEquals(detalis, task2.getDetails(), "Сохраняются разное описания задач в менеджере");
         Assertions.assertEquals(status, task2.getStatus(), "Сохраняются разный статус задач в менеджере");
     }
-
 }
