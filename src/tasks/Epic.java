@@ -14,13 +14,26 @@ public class Epic extends Task {
     private LocalDateTime endTime;
 
     public Epic(String task, String details) {
-        super(task, details, Status.NEW);
+        super(task, details, Status.NEW, null, Duration.ZERO);
+        this.endTime = null;
+    }
+
+    public void updateEpicEndTime(){
+        if(subTasks.isEmpty()) {
+            this.startTime = null;
+            this.endTime = null;
+            this.duration = Duration.ZERO;
+        } else {
+            this.startTime = getStartTime();
+            this.endTime = getEndTime();
+            this.duration = getDuration();
+        }
     }
 
     @Override
     public Duration getDuration() {
-        if(this.getStartTime() != null && this.getEndTime() != null) {
-            return Duration.between(startTime, endTime);
+        if(this.startTime != null && this.endTime != null) {
+            return Duration.between(this.startTime, this.endTime);
         }
         return Duration.ZERO;
     }
@@ -43,6 +56,10 @@ public class Epic extends Task {
                 .filter(Objects::nonNull)
                 .max(LocalDateTime::compareTo)
                 .orElse(null);
+    }
+
+    public void addSubtaskToEpic(SubTask subTask){
+        this.subTasks.add(subTask);
     }
 
     public ArrayList<SubTask> getSubTasks() {
@@ -92,6 +109,8 @@ public class Epic extends Task {
                 ", details='" + details + '\'' +
                 ", id=" + id +
                 ", status=" + status +
+                ", startTime=" + startTime +
+                ", duration=" + duration +
                 '}';
     }
 }

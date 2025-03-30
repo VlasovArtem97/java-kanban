@@ -14,18 +14,14 @@ public class Task {
     protected LocalDateTime startTime;
 
 
-    public Task(String task, String details, Status status) {
+    public Task(String task, String details, Status status, LocalDateTime startTime, Duration duration) {
         this.task = task;
         this.details = details;
         this.status = status;
+        this.startTime = startTime;
+        this.duration = duration;
     }
 
-    private Task(int id, String task, String details, Status status) {
-        this.id = id;
-        this.task = task;
-        this.details = details;
-        this.status = status;
-    }
 
     public Duration getDuration() {
         return duration;
@@ -44,7 +40,7 @@ public class Task {
     }
 
     public LocalDateTime getEndTime() {
-        return startTime.plus(duration);
+        return startTime != null && duration != null ? startTime.plus(duration) : null;
     }
 
     public int getId() {
@@ -95,6 +91,8 @@ public class Task {
                 ", details='" + details + '\'' +
                 ", id=" + id +
                 ", status=" + status +
+                ", startTime=" + startTime +
+                ", duration=" + duration +
                 '}';
     }
 }

@@ -1,13 +1,4 @@
-id,type,name,status,description,epic 
-1,TASK,Задача Task 1,NEW,Описание задачи Task 1,
-7,TASK,Задача Task 1,NEW,Описание задачи Task 1,
-2,EPIC,Epic 1,NEW,Описание 1 Epic задачи,
-3,EPIC,Epic 2,NEW,Описание 2 Epic задачи,
-8,EPIC,Epic 1,NEW,Описание 1 Epic задачи,
-9,EPIC,Epic 2,NEW,Описание 2 Epic задачи,
-4,SUBTASK,SubTask 1,NEW,Описание subTask 1,2
-5,SUBTASK,SubTask 2,NEW,Описание subTask 2,2
-6,SUBTASK,SubTask 3,NEW,Описание subTask 3,2
-10,SUBTASK,SubTask 1,NEW,Описание subTask 1,8
-11,SUBTASK,SubTask 2,NEW,Описание subTask 2,8
-12,SUBTASK,SubTask 3,NEW,Описание subTask 3,8
+id,type,name,status,description,startTime,duration,epic 
+1,EPIC,Epic 1,NEW,Описание 1 Epic задачи,null,0,
+2,EPIC,Epic 2,NEW,Описание 2 Epic задачи,24.03.29|13:00:00,60,
+3,SUBTASK,SubTask 1,NEW,Описание subTask 1,24.03.29|13:00:00,60,2

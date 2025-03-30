@@ -2,12 +2,15 @@ package tasks;
 
 import tasktracker.TypeTask;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 public class SubTask extends Task {
 
     private final int epicId;
 
-    public SubTask(String task, String details, int epicId) {
-        super(task, details, Status.NEW);
+    public SubTask(String task, String details, int epicId, LocalDateTime startTime, Duration duration) {
+        super(task, details, Status.NEW, startTime, duration);
         this.epicId = epicId;
     }
 
@@ -28,6 +31,8 @@ public class SubTask extends Task {
                 ", details='" + details + '\'' +
                 ", id=" + id +
                 ", status=" + status +
+                ", startTime=" + startTime +
+                ", duration=" + duration +
                 '}';
     }
 }
