@@ -5,7 +5,6 @@ import tasktracker.TypeTask;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class Epic extends Task {
@@ -18,7 +17,7 @@ public class Epic extends Task {
         this.endTime = null;
     }
 
-    public void updateEpicEndTime(){
+    public void updateEpicEndTime() {
         if(subTasks.isEmpty()) {
             this.startTime = null;
             this.endTime = null;
@@ -58,7 +57,7 @@ public class Epic extends Task {
                 .orElse(null);
     }
 
-    public void addSubtaskToEpic(SubTask subTask){
+    public void addSubtaskToEpic(SubTask subTask) {
         this.subTasks.add(subTask);
     }
 
@@ -71,7 +70,7 @@ public class Epic extends Task {
     }
 
     public void updateStatusEpic() {
-        if (subTasks.isEmpty()) {
+        if(subTasks.isEmpty()) {
             setStatus(Status.NEW);
         }
 
@@ -79,7 +78,7 @@ public class Epic extends Task {
         boolean inProgress = false;
 
         for (SubTask subTask : subTasks) {
-            if (subTask.getStatus() == Status.NEW) {
+            if(subTask.getStatus() == Status.NEW) {
                 allDone = false;
             } else if (subTask.getStatus() == Status.IN_PROGRESS) {
                 allDone = false;
