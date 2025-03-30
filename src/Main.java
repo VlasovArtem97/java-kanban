@@ -3,8 +3,6 @@ import tasks.Epic;
 import tasks.Status;
 import tasks.SubTask;
 import tasks.Task;
-import tasktracker.FileBackedTaskManager;
-import tasktracker.InMemoryTaskManager;
 import tasktracker.Managers;
 import tasktracker.TaskManager;
 
@@ -25,35 +23,29 @@ public class Main {
             File file = Paths.get(LOCATION).toFile();
             TaskManager taskManager = Managers.getDefault(file);
 
-//            Task task1 = new Task("Задача Task 1", "Описание задачи Task 1", Status.NEW,
-//                    LocalDateTime.of(2024,3,29,12,0), Duration.ofHours(1));
-//            Epic epic1 = new Epic("Epic 1", "Описание 1 Epic задачи");
-//            Epic epic2 = new Epic("Epic 2", "Описание 2 Epic задачи");
-//
-//            taskManager.addTask(task1);
-//            taskManager.addEpic(epic1);
-//            taskManager.addEpic(epic2);
-//
-//            SubTask subTask1 = new SubTask("SubTask 1", "Описание subTask 1", epic1.getId(),
-//                    LocalDateTime.of(2024,3,29,13,0), Duration.ofHours(1));
-//            SubTask subTask2 = new SubTask("SubTask 2", "Описание subTask 2", epic1.getId(),
-//                    LocalDateTime.of(2024,3,29,14,0), Duration.ofHours(1));
-//            SubTask subTask3 = new SubTask("SubTask 3", "Описание subTask 3", epic1.getId(),
-//                    LocalDateTime.of(2024,3,29,13,0), Duration.ofHours(1));
-//
-//            taskManager.addSubTask(subTask1);
-//            taskManager.addSubTask(subTask2);
-//            taskManager.addSubTask(subTask3);
+            Task task1 = new Task("Задача Task 1", "Описание задачи Task 1", Status.NEW,
+                    LocalDateTime.of(2024, 3, 29, 12, 0), Duration.ofHours(1));
+            Epic epic1 = new Epic("Epic 1", "Описание 1 Epic задачи");
+            Epic epic2 = new Epic("Epic 2", "Описание 2 Epic задачи");
 
+            taskManager.addTask(task1);
+            taskManager.addEpic(epic1);
+            taskManager.addEpic(epic2);
+
+            SubTask subTask1 = new SubTask("SubTask 1", "Описание subTask 1", epic1.getId(),
+                    LocalDateTime.of(2024, 3, 29, 13, 0), Duration.ofHours(1));
+            SubTask subTask2 = new SubTask("SubTask 2", "Описание subTask 2", epic1.getId(),
+                    LocalDateTime.of(2024, 3, 29, 14, 0), Duration.ofHours(1));
+            SubTask subTask3 = new SubTask("SubTask 3", "Описание subTask 3", epic1.getId(),
+                    LocalDateTime.of(2024, 3, 29, 15, 0), Duration.ofHours(1));
+
+            taskManager.addSubTask(subTask1);
+            taskManager.addSubTask(subTask2);
+            taskManager.addSubTask(subTask3);
 
             System.out.println(taskManager.getPrioritizedTasks());
 
             printAllTasks(taskManager);
-
-
-            System.out.println("Должны быть 2 задачи: " + taskManager.getListTask().size());
-            System.out.println("Должны быть 4 эпика: " + taskManager.getListEpic().size());
-            System.out.println("Должны быть 6 подзадач: " + taskManager.getListSubTask().size());
 
         } catch (IOException e) {
             System.out.println("Файл уже создан");

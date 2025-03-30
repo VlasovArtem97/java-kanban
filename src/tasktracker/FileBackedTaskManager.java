@@ -10,7 +10,6 @@ import java.io.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Map;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
@@ -26,6 +25,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     public void save() {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file))) {
             bufferedWriter.write("id,type,name,status,description,startTime,duration,epic \n");
+
             for (Map.Entry<Integer, Task> entry : tasks.entrySet()) {
                 Task task = entry.getValue();
                 bufferedWriter.write(toString(task));
