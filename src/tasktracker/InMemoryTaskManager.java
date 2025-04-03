@@ -174,11 +174,15 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateTask(Task task) { // Метод обновления Task
-        tasks.put(task.getId(), task);
         Task task1 = tasks.get(task.getId());
         priorityTask.remove(task1);
+        if (isTaskIntersecting(task)) {
+            priorityTask.add(task1);
+            throw new IllegalArgumentException("В обновленной Task задаче установленное время " +
+                    "пересекается с другой задачей по времени выполнения = " + task);
+        }
         priorityTask.add(task);
-
+        tasks.put(task.getId(), task);
     }
 
     @Override
@@ -189,14 +193,22 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateSubTask(SubTask subTask) { // Метод обновления subTask + обновление Epic
-        Task subTask1 = subTasks.get(subTask.getId());
+        SubTask subTask1 = subTasks.get(subTask.getId());
         priorityTask.remove(subTask1);
-        priorityTask.add(subTask);
-        subTasks.put(subTask.getId(), subTask);
-        Epic epic = epics.get(subTask.getEpicId());
-        if (epic != null) {
-            epic.updateStatusEpic();
-            epic.updateEpicEndTime();
+        if (isTaskIntersecting(subTask)) {
+            priorityTask.add(subTask1);
+            throw new IllegalArgumentException("В обновленной subTask задаче установленное время " +
+                    "пересекается с другой задачей по времени выполнения = " + subTask);
+        } else {
+            priorityTask.add(subTask);
+            subTasks.put(subTask.getId(), subTask);
+            Epic epic = epics.get(subTask.getEpicId());
+            if (epic != null) {
+                epic.getSubTasks().remove(subTask1);
+                epic.getSubTasks().add(subTask);
+                epic.updateStatusEpic();
+                epic.updateEpicEndTime();
+            }
         }
     }
 

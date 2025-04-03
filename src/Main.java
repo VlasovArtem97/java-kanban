@@ -46,12 +46,12 @@ public class Main {
 
             printAllTasks(taskManager);
 
-        } catch (IOException e) {
-            System.out.println("Файл уже создан");
         } catch (ManagerSaveException e) {
             System.out.println("Требуется перезагрузка");
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
+        } catch (IOException e) {
+            System.out.println("Файл уже создан");
         }
     }
 

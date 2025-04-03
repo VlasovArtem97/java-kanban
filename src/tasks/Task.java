@@ -22,9 +22,18 @@ public class Task {
         this.duration = duration;
     }
 
+    public Task(Task copyTask) {
+        this.id = copyTask.id;
+        this.task = copyTask.task;
+        this.details = copyTask.details;
+        this.status = copyTask.status;
+        this.startTime = copyTask.startTime;
+        this.duration = copyTask.duration;
+    }
+
 
     public Duration getDuration() {
-        return duration;
+        return this.duration != null ? duration : Duration.ZERO;
     }
 
     public void setDuration(Duration duration) {

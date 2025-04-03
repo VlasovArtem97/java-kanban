@@ -31,10 +31,10 @@ public class Epic extends Task {
 
     @Override
     public Duration getDuration() {
-        if (this.startTime != null && this.endTime != null) {
-            return Duration.between(this.startTime, this.endTime);
-        }
-        return Duration.ZERO;
+        return subTasks.stream()
+                .map(SubTask::getDuration)
+                .filter(Objects::nonNull)
+                .reduce(Duration.ZERO, Duration::plus);
     }
 
     @Override

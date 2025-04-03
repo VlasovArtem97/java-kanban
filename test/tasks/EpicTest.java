@@ -1,6 +1,5 @@
 package tasks;
 
-import exceptions.ManagerSaveException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,12 +40,17 @@ class EpicTest {
     @Test
     void testUpdateTaskStatus() {
         Assertions.assertEquals(Status.NEW, epic1.getStatus(), "Статус Epic задачи не равен NEW");
-        subTask1.setStatus(Status.DONE);
-        subTask2.setStatus(Status.DONE);
-        subTask3.setStatus(Status.DONE);
-        taskManager.updateSubTask(subTask1);
-        taskManager.updateSubTask(subTask2);
-        taskManager.updateSubTask(subTask3);
+        SubTask subTaskOne = new SubTask(subTask1);
+        subTaskOne.setStatus(Status.DONE);
+        SubTask subTaskTwo = new SubTask(subTask2);
+        subTaskTwo.setStatus(Status.DONE);
+        SubTask subTaskThree = new SubTask(subTask3);
+        subTaskThree.setStatus(Status.DONE);
+        taskManager.updateSubTask(subTaskOne);
+        taskManager.updateSubTask(subTaskTwo);
+        taskManager.updateSubTask(subTaskThree);
+        System.out.println(taskManager.getListEpic());
+        System.out.println(subTaskOne);
         Assertions.assertEquals(Status.DONE, epic1.getStatus(), "Статус Epic задачи не изменился на DONE");
         subTask1.setStatus(Status.NEW);
         taskManager.updateSubTask(subTask1);

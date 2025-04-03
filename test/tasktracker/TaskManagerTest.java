@@ -116,8 +116,9 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void testUpdateTask() {
-        task1.setStatus(Status.IN_PROGRESS);
-        taskManager.updateTask(task1);
+        Task taskOne = new Task(task1);
+        taskOne.setStatus(Status.IN_PROGRESS);
+        taskManager.updateTask(taskOne);
         Assertions.assertEquals(Status.IN_PROGRESS, taskManager.getTaskId(1).getStatus(),
                 "Метод по обновлению Task задачи не работает");
     }

@@ -47,10 +47,15 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     }
 
     @Test
-    void testIsTaskIntersecting() {
+    void testIsTaskIntersecting() {//Тест-метод по проверки пересечения задач по времени
         SubTask subTask4 = new SubTask("SubTask 3", "Описание subTask 3", epic1.getId(),
                 LocalDateTime.of(2024, 3, 29, 15, 0), Duration.ofHours(1));
         Assertions.assertFalse(taskManager.isTaskIntersecting(subTask4), "Задачи пересекаются");
+        SubTask subTaskTwo = new SubTask(subTask2);
+        subTaskTwo.setStartTime(LocalDateTime.of(2024, 3, 29, 12, 0));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            taskManager.updateSubTask(subTaskTwo);
+        }, "Ожидалось словить исключение IllegalArgumentException");
         SubTask subTask5 = new SubTask("SubTask 3", "Описание subTask 3", epic1.getId(),
                 LocalDateTime.of(2024, 3, 29, 12, 50), Duration.ofHours(1));
         Assertions.assertTrue(taskManager.isTaskIntersecting(subTask5), "Задачи не пересекаются");
