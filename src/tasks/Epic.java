@@ -2,14 +2,61 @@ package tasks;
 
 import tasktracker.TypeTask;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Epic extends Task {
 
     private ArrayList<SubTask> subTasks = new ArrayList<>();
+    private LocalDateTime endTime;
 
     public Epic(String task, String details) {
-        super(task, details, Status.NEW);
+        super(task, details, Status.NEW, null, Duration.ZERO);
+        this.endTime = null;
+    }
+
+    public void updateEpicEndTime() {
+        if (subTasks.isEmpty()) {
+            this.startTime = null;
+            this.endTime = null;
+            this.duration = Duration.ZERO;
+        } else {
+            this.startTime = getStartTime();
+            this.endTime = getEndTime();
+            this.duration = getDuration();
+        }
+    }
+
+    @Override
+    public Duration getDuration() {
+        return subTasks.stream()
+                .map(SubTask::getDuration)
+                .filter(Objects::nonNull)
+                .reduce(Duration.ZERO, Duration::plus);
+    }
+
+    @Override
+    public LocalDateTime getStartTime() {
+        return subTasks.stream()
+                .map(SubTask::getStartTime)
+                .filter(Objects::nonNull)
+                .min(LocalDateTime::compareTo)
+                .orElse(null);
+    }
+
+    @Override
+    public LocalDateTime getEndTime() {
+        return subTasks.stream()
+                .map(SubTask::getEndTime)
+                .filter(Objects::nonNull)
+                .max(LocalDateTime::compareTo)
+                .orElse(null);
+    }
+
+    public void addSubtaskToEpic(SubTask subTask) {
+        this.subTasks.add(subTask);
     }
 
     public ArrayList<SubTask> getSubTasks() {
@@ -59,6 +106,8 @@ public class Epic extends Task {
                 ", details='" + details + '\'' +
                 ", id=" + id +
                 ", status=" + status +
+                ", startTime=" + startTime +
+                ", duration=" + duration +
                 '}';
     }
 }

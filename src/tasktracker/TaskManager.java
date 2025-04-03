@@ -10,6 +10,12 @@ import java.util.List;
 
 public interface TaskManager {
 
+    List<Task> getPrioritizedTasks();
+
+    boolean isIntersection(Task task1, Task task2);
+
+    boolean isTaskIntersecting(Task newTask);
+
     List<Task> getHistory();
 
     List<Task> getListTask();

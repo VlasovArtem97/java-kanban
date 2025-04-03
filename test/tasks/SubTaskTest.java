@@ -8,22 +8,26 @@ import tasktracker.Managers;
 import tasktracker.TaskManager;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 class SubTaskTest {
 
     private static TaskManager taskManager;
-    private static Epic epic;
+    private static Epic epic1;
     private static SubTask subTask1;
     private static SubTask subTask2;
 
     @BeforeEach
     void beforeEach() throws IOException, ManagerSaveException { // Тест-метод в котором мы перед началом каждого теста объявляем объекты и добавляем в менеджер
         taskManager = Managers.getDefault();
-        epic = new Epic("Задача Эпик1", "Описание эпик задачи");
-        taskManager.addEpic(epic);
-        subTask1 = new SubTask("Задача 1", "Описание задачи 1", epic.getId());
+        epic1 = new Epic("Задача Эпик1", "Описание эпик задачи");
+        taskManager.addEpic(epic1);
+        subTask1 = new SubTask("SubTask 1", "Описание subTask 1", epic1.getId(),
+                LocalDateTime.of(2024, 3, 29, 13, 0), Duration.ofHours(1));
+        subTask2 = new SubTask("SubTask 2", "Описание subTask 2", epic1.getId(),
+                LocalDateTime.of(2024, 3, 29, 14, 0), Duration.ofHours(1));
         taskManager.addSubTask(subTask1);
-        subTask2 = new SubTask("Задача 2", "Описание задачи 2", epic.getId());
         taskManager.addSubTask(subTask2);
     }
 

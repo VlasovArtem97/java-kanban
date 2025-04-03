@@ -2,23 +2,54 @@ package tasks;
 
 import tasktracker.TypeTask;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 public class Task {
     protected final String task;
     protected final String details;
     protected int id;
     protected Status status;
+    protected Duration duration;
+    protected LocalDateTime startTime;
 
-    public Task(String task, String details, Status status) {
+
+    public Task(String task, String details, Status status, LocalDateTime startTime, Duration duration) {
         this.task = task;
         this.details = details;
         this.status = status;
+        this.startTime = startTime;
+        this.duration = duration;
     }
 
-    private Task(int id, String task, String details, Status status) {
-        this.id = id;
-        this.task = task;
-        this.details = details;
-        this.status = status;
+    public Task(Task copyTask) {
+        this.id = copyTask.id;
+        this.task = copyTask.task;
+        this.details = copyTask.details;
+        this.status = copyTask.status;
+        this.startTime = copyTask.startTime;
+        this.duration = copyTask.duration;
+    }
+
+
+    public Duration getDuration() {
+        return this.duration != null ? duration : Duration.ZERO;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return startTime != null && duration != null ? startTime.plus(duration) : null;
     }
 
     public int getId() {
@@ -69,6 +100,8 @@ public class Task {
                 ", details='" + details + '\'' +
                 ", id=" + id +
                 ", status=" + status +
+                ", startTime=" + startTime +
+                ", duration=" + duration +
                 '}';
     }
 }
