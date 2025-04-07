@@ -7,12 +7,16 @@ import tasks.SubTask;
 import tasks.Task;
 
 import java.io.*;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private File file;
     private int maxId = 0;
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yy.MM.dd|HH:mm:ss");
 
     public FileBackedTaskManager(File file) {
         this.file = file;
@@ -20,7 +24,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     public void save() {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file))) {
-            bufferedWriter.write("id,type,name,status,description,epic \n");
+            bufferedWriter.write("id,type,name,status,description,startTime,duration,epic \n");
+
             for (Map.Entry<Integer, Task> entry : tasks.entrySet()) {
                 Task task = entry.getValue();
                 bufferedWriter.write(toString(task));
@@ -60,71 +65,97 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     private String toString(Task task) {
         if (task.getTypeTask().equals(TypeTask.EPIC)) {
             Epic epic = (Epic) task;
-            return String.format("%s,%s,%s,%s,%s,%n", epic.getId(), epic.getTypeTask(), epic.getTask(),
-                    epic.getStatus(), epic.getDetails());
+            return String.format("%s,%s,%s,%s,%s,%s,%s,%n", epic.getId(), epic.getTypeTask(), epic.getTask(),
+                    epic.getStatus(), epic.getDetails(),
+                    epic.getStartTime() != null ? epic.getStartTime().format(DATE_TIME_FORMATTER) : null,
+                    epic.getDuration().toMinutes());
         } else if (task.getTypeTask().equals(TypeTask.SUBTASK)) {
             SubTask subTask = (SubTask) task;
-            return String.format("%s,%s,%s,%s,%s,%s%n", subTask.getId(), subTask.getTypeTask(), subTask.getTask(),
-                    subTask.getStatus(), subTask.getDetails(), subTask.getEpicId());
+            return String.format("%s,%s,%s,%s,%s,%s,%s,%s%n", subTask.getId(), subTask.getTypeTask(), subTask.getTask(),
+                    subTask.getStatus(), subTask.getDetails(),
+                    subTask.getStartTime() != null ? subTask.getStartTime().format(DATE_TIME_FORMATTER) : null,
+                    subTask.getDuration().toMinutes(), subTask.getEpicId());
         } else {
-            return String.format("%s,%s,%s,%s,%s,%n", task.getId(), task.getTypeTask(), task.getTask(),
-                    task.getStatus(), task.getDetails());
+            return String.format("%s,%s,%s,%s,%s,%s,%s%n", task.getId(), task.getTypeTask(), task.getTask(),
+                    task.getStatus(), task.getDetails(),
+                    task.getStartTime() != null ? task.getStartTime().format(DATE_TIME_FORMATTER) : null,
+                    task.getDuration().toMinutes());
         }
     }
 
     private Task fromString(String value) {
         String[] split = value.split(",");
         Task task = null;
-        if (split[1].equals("TASK")) {
-            if (split[3].equals("NEW")) {
-                task = new Task(split[2], split[4], Status.NEW);
-                task.setId(Integer.parseInt(split[0]));
-                tasks.put(task.getId(), task);
-            } else if (split[3].equals("IN_PROGRESS")) {
-                task = new Task(split[2], split[4], Status.IN_PROGRESS);
-                task.setId(Integer.parseInt(split[0]));
-                tasks.put(task.getId(), task);
-            } else {
-                task = new Task(split[2], split[4], Status.DONE);
-                task.setId(Integer.parseInt(split[0]));
-                tasks.put(task.getId(), task);
+        switch (split[1]) {
+            case "TASK" -> {
+                if (split[3].equals("NEW")) {
+                    task = new Task(split[2], split[4], Status.NEW, LocalDateTime.parse(split[5], DATE_TIME_FORMATTER),
+                            Duration.ofMinutes(Long.parseLong(split[6])));
+                    task.setId(Integer.parseInt(split[0]));
+                    addTask(task);
+                } else if (split[3].equals("IN_PROGRESS")) {
+                    task = new Task(split[2], split[4], Status.IN_PROGRESS, LocalDateTime.parse(split[5], DATE_TIME_FORMATTER),
+                            Duration.ofMinutes(Long.parseLong(split[6])));
+                    task.setId(Integer.parseInt(split[0]));
+                    addTask(task);
+                } else {
+                    task = new Task(split[2], split[4], Status.DONE, LocalDateTime.parse(split[5], DATE_TIME_FORMATTER),
+                            Duration.ofMinutes(Long.parseLong(split[6])));
+                    task.setId(Integer.parseInt(split[0]));
+                    addTask(task);
+                }
             }
-        } else if (split[1].equals("EPIC")) {
-            if (split[3].equals("NEW")) {
-                task = new Epic(split[2], split[4]);
-                task.setStatus(Status.NEW);
-                task.setId(Integer.parseInt(split[0]));
-                epics.put(task.getId(), (Epic) task);
-            } else if (split[3].equals("IN_PROGRESS")) {
-                task = new Epic(split[2], split[4]);
-                task.setStatus(Status.IN_PROGRESS);
-                task.setId(Integer.parseInt(split[0]));
-                epics.put(task.getId(), (Epic) task);
-            } else {
-                task = new Epic(split[2], split[4]);
-                task.setStatus(Status.DONE);
-                task.setId(Integer.parseInt(split[0]));
-                epics.put(task.getId(), (Epic) task);
+            case "EPIC" -> {
+                if (split[3].equals("NEW")) {
+                    task = new Epic(split[2], split[4]);
+                    task.setStatus(Status.NEW);
+                    task.setId(Integer.parseInt(split[0]));
+                    addEpic((Epic) task);
+                    ((Epic) task).updateEpicEndTime();
+                } else if (split[3].equals("IN_PROGRESS")) {
+                    task = new Epic(split[2], split[4]);
+                    task.setStatus(Status.IN_PROGRESS);
+                    task.setId(Integer.parseInt(split[0]));
+                    epics.put(task.getId(), (Epic) task);
+                    addEpic((Epic) task);
+                    ((Epic) task).updateEpicEndTime();
+                } else {
+                    task = new Epic(split[2], split[4]);
+                    task.setStatus(Status.DONE);
+                    task.setId(Integer.parseInt(split[0]));
+                    addEpic((Epic) task);
+                    ((Epic) task).updateEpicEndTime();
+                }
             }
-        } else if (split[1].equals("SUBTASK")) {
-            if (split[3].equals("NEW")) {
-                String a = split[5];
-                task = new SubTask(split[2], split[4], Integer.parseInt(a));
-                task.setStatus(Status.NEW);
-                task.setId(Integer.parseInt(split[0]));
-                subTasks.put(task.getId(), (SubTask) task);
-            } else if (split[3].equals("IN_PROGRESS")) {
-                String a = split[5];
-                task = new SubTask(split[2], split[4], Integer.parseInt(a));
-                task.setStatus(Status.IN_PROGRESS);
-                task.setId(Integer.parseInt(split[0]));
-                subTasks.put(task.getId(), (SubTask) task);
-            } else {
-                String a = split[5];
-                task = new SubTask(split[2], split[4], Integer.parseInt(a));
-                task.setStatus(Status.DONE);
-                task.setId(Integer.parseInt(split[0]));
-                subTasks.put(task.getId(), (SubTask) task);
+            case "SUBTASK" -> {
+                if (split[3].equals("NEW")) {
+                    String a = split[7];
+                    task = new SubTask(split[2], split[4], Integer.parseInt(a), LocalDateTime.parse(split[5], DATE_TIME_FORMATTER),
+                            Duration.ofMinutes(Long.parseLong(split[6])));
+                    task.setStatus(Status.NEW);
+                    task.setId(Integer.parseInt(split[0]));
+                    Epic epic = epics.get(Integer.parseInt(a));
+                    addSubTask((SubTask) task);
+                    epic.updateEpicEndTime();
+                } else if (split[3].equals("IN_PROGRESS")) {
+                    String a = split[7];
+                    task = new SubTask(split[2], split[4], Integer.parseInt(a), LocalDateTime.parse(split[5], DATE_TIME_FORMATTER),
+                            Duration.ofMinutes(Long.parseLong(split[6])));
+                    task.setStatus(Status.IN_PROGRESS);
+                    task.setId(Integer.parseInt(split[0]));
+                    Epic epic = epics.get(Integer.parseInt(a));
+                    addSubTask((SubTask) task);
+                    epic.updateEpicEndTime();
+                } else {
+                    String a = split[7];
+                    task = new SubTask(split[2], split[4], Integer.parseInt(a), LocalDateTime.parse(split[5], DATE_TIME_FORMATTER),
+                            Duration.ofMinutes(Long.parseLong(split[6])));
+                    task.setStatus(Status.DONE);
+                    task.setId(Integer.parseInt(split[0]));
+                    Epic epic = epics.get(Integer.parseInt(a));
+                    addSubTask((SubTask) task);
+                    epic.updateEpicEndTime();
+                }
             }
         }
         return task;
@@ -160,7 +191,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             System.out.println("Не удается добавить SubTask задачу в hashMap: " + e.getMessage());
         }
     }
-
 
     @Override
     public void deleteAllTask() {
