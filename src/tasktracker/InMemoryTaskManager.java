@@ -33,12 +33,12 @@ public class InMemoryTaskManager implements TaskManager {
         LocalDateTime start2 = task2.getStartTime();
         LocalDateTime end2 = task2.getEndTime();
 
-        if (start1 == null || start2 == null) {
+        if (start1 == null || end1 == null || start2 == null || end2 == null) {
             return false;
         }
-
         return start2.isBefore(end1) && start1.isBefore(end2) || start1.equals(start2) && end1.equals(end2);
     }
+
 
     public boolean isTaskIntersecting(Task newTask) {
         return priorityTask.stream()
@@ -193,7 +193,10 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateSubTask(SubTask subTask) { // Метод обновления subTask + обновление Epic
-        SubTask subTask1 = subTasks.get(subTask.getId());
+        Optional<SubTask> subTaskOne = subTasks.values().stream()
+                .filter(subTask2 -> subTask2.getId() == subTask.getId())
+                .findFirst();
+        SubTask subTask1 = subTaskOne.orElseThrow(() -> new IllegalArgumentException("Проверь параметры Subtask задачи"));
         priorityTask.remove(subTask1);
         if (isTaskIntersecting(subTask)) {
             priorityTask.add(subTask1);
