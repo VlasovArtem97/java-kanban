@@ -27,20 +27,21 @@ public class SubTasksHandler extends BaseHttpHandler implements HttpHandler {
 
         switch (metod) {
             case "GET":
-                getSubtasksHandle(pathParts, exchange);
+                requestGet(pathParts, exchange);
                 break;
             case "POST":
-                postSubtasksHandle(body, pathParts, exchange);
+                requestPost(body, pathParts, exchange);
                 break;
             case "DELETE":
-                deleteSubtasksHandle(pathParts, exchange);
+                requestDelete(pathParts, exchange);
                 break;
             default:
-                sendNotFound("Выбранный метод недопустим", exchange, 405);
+                sendMethodNotAllowed("Выбранный метод недопустим", exchange);
         }
     }
 
-    private void getSubtasksHandle(String[] pathParts, HttpExchange exchange) throws IOException {
+    @Override
+    protected void requestGet(String[] pathParts, HttpExchange exchange) throws IOException {
         if (pathParts.length == 3) {
             try {
                 SubTask task = managers.getSubTaskId(Integer.parseInt(pathParts[2]));
@@ -71,7 +72,8 @@ public class SubTasksHandler extends BaseHttpHandler implements HttpHandler {
         }
     }
 
-    private void postSubtasksHandle(String body, String[] pathParts, HttpExchange exchange) throws IOException {
+    @Override
+    protected void requestPost(String body, String[] pathParts, HttpExchange exchange) throws IOException {
         if (pathParts.length == 3) {
             try {
                 SubTask task = gson.fromJson(body, SubTask.class);
@@ -101,7 +103,7 @@ public class SubTasksHandler extends BaseHttpHandler implements HttpHandler {
                 sendNotFound("Ошибка: id Subtask задачи должен быть числом (Bad Request)", exchange, 400);
             } catch (IllegalArgumentException e) {
                 sendHasInteractions("Ошибка: Subtasks задача c id - " + pathParts[2] + " пересекается с другой " +
-                        "задачей по времени выполнения (Not Acceptable)", exchange, 406);
+                        "задачей по времени выполнения (Not Acceptable)", exchange);
             }
         } else if (pathParts.length == 2) {
             try {
@@ -116,14 +118,15 @@ public class SubTasksHandler extends BaseHttpHandler implements HttpHandler {
                 }
             } catch (IllegalArgumentException e) {
                 sendHasInteractions("Ошибка: Subtask задача пересекается с другой " +
-                        "задачей по времени выполнения (Not Acceptable)", exchange, 406);
+                        "задачей по времени выполнения (Not Acceptable)", exchange);
             }
         } else {
             sendNotFound("Ошибка: проверьте Url запроса (Bad Request)", exchange, 400);
         }
     }
 
-    private void deleteSubtasksHandle(String[] pathParts, HttpExchange exchange) throws IOException {
+    @Override
+    protected void requestDelete(String[] pathParts, HttpExchange exchange) throws IOException {
         if (pathParts.length == 3) {
             try {
                 Task task = managers.getSubTaskId(Integer.parseInt(pathParts[2]));

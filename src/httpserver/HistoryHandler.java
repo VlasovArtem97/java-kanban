@@ -23,21 +23,26 @@ public class HistoryHandler extends BaseHttpHandler implements HttpHandler {
 
         switch (metod) {
             case "GET":
-                if (pathParts.length == 2) {
-                    List<Task> tasks = managers.getHistory();
-                    if (tasks.isEmpty()) {
-                        sendNotFound("Список истории просмотренных задач не создан (Not Found)",
-                                exchange,
-                                404);
-                    } else {
-                        sendText(gson.toJson(managers.getHistory()), exchange, 200);
-                    }
-                } else {
-                    sendNotFound("Ошибка: проверьте Url запроса (Bad Request)", exchange, 400);
-                }
+                requestGet(pathParts, exchange);
                 break;
             default:
-                sendNotFound("Выбранный метод недопустим", exchange, 405);
+                sendMethodNotAllowed("Выбранный метод недопустим", exchange);
+        }
+    }
+
+    @Override
+    protected void requestGet(String[] pathParts, HttpExchange exchange) throws IOException {
+        if (pathParts.length == 2) {
+            List<Task> tasks = managers.getHistory();
+            if (tasks.isEmpty()) {
+                sendNotFound("Список истории просмотренных задач не создан (Not Found)",
+                        exchange,
+                        404);
+            } else {
+                sendText(gson.toJson(managers.getHistory()), exchange, 200);
+            }
+        } else {
+            sendNotFound("Ошибка: проверьте Url запроса (Bad Request)", exchange, 400);
         }
     }
 }

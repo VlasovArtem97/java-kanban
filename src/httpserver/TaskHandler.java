@@ -26,20 +26,21 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
 
         switch (metod) {
             case "GET":
-                getTasksHandle(pathParts, exchange);
+                requestGet(pathParts, exchange);
                 break;
             case "POST":
-                postTasksHandle(body, pathParts, exchange);
+                requestPost(body, pathParts, exchange);
                 break;
             case "DELETE":
-                deleteTasksHandle(pathParts, exchange);
+                requestDelete(pathParts, exchange);
                 break;
             default:
-                sendNotFound("Выбранный метод недопустим", exchange, 405);
+                sendMethodNotAllowed("Выбранный метод недопустим", exchange);
         }
     }
 
-    private void getTasksHandle(String[] pathParts, HttpExchange exchange) throws IOException {
+    @Override
+    protected void requestGet(String[] pathParts, HttpExchange exchange) throws IOException {
         if (pathParts.length == 3) {
             try {
                 Task task = managers.getTaskId(Integer.parseInt(pathParts[2]));
@@ -70,7 +71,8 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
         }
     }
 
-    private void postTasksHandle(String body, String[] pathParts, HttpExchange exchange) throws IOException {
+    @Override
+    protected void requestPost(String body, String[] pathParts, HttpExchange exchange) throws IOException {
         if (pathParts.length == 3) {
             try {
                 Task task = gson.fromJson(body, Task.class);
@@ -100,7 +102,7 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
                 sendNotFound("Ошибка: id Task задачи должен быть числом (Bad Request)", exchange, 400);
             } catch (IllegalArgumentException e) {
                 sendHasInteractions("Ошибка: Task задача c id - " + pathParts[2] + " пересекается с другой " +
-                        "задачей по времени выполнения (Not Acceptable)", exchange, 406);
+                        "задачей по времени выполнения (Not Acceptable)", exchange);
             }
         } else if (pathParts.length == 2) {
             try {
@@ -115,14 +117,15 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
                 }
             } catch (IllegalArgumentException e) {
                 sendHasInteractions("Ошибка: Task задача пересекается с другой " +
-                        "задачей по времени выполнения (Not Acceptable)", exchange, 406);
+                        "задачей по времени выполнения (Not Acceptable)", exchange);
             }
         } else {
             sendNotFound("Ошибка: проверьте Url запроса (Bad Request)", exchange, 400);
         }
     }
 
-    private void deleteTasksHandle(String[] pathParts, HttpExchange exchange) throws IOException {
+    @Override
+    protected void requestDelete(String[] pathParts, HttpExchange exchange) throws IOException {
         if (pathParts.length == 3) {
             try {
                 Task task = managers.getTaskId(Integer.parseInt(pathParts[2]));

@@ -4,6 +4,8 @@ import com.google.gson.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import servertypeadapters.DurationTypeAdapter;
+import servertypeadapters.LocalTimeTypeAdapter;
 import tasks.Epic;
 import tasks.Status;
 import tasks.SubTask;

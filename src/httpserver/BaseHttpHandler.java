@@ -3,6 +3,8 @@ package httpserver;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpExchange;
+import servertypeadapters.DurationTypeAdapter;
+import servertypeadapters.LocalTimeTypeAdapter;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -36,7 +38,23 @@ public class BaseHttpHandler {
         sendText(text, exchange, statusCode);
     }
 
-    protected void sendHasInteractions(String text, HttpExchange exchange, int statusCode) throws IOException {
-        sendText(text, exchange, statusCode);
+    protected void sendHasInteractions(String text, HttpExchange exchange) throws IOException {
+        sendText(text, exchange, 406);
+    }
+
+    protected void sendMethodNotAllowed(String text, HttpExchange exchange) throws IOException {
+        sendText(text, exchange, 405);
+    }
+
+    protected void requestGet(String[] pathParts, HttpExchange exchange) throws IOException {
+        sendMethodNotAllowed("Метод отправки не разрешен", exchange);
+    }
+
+    protected void requestPost(String body, String[] pathParts, HttpExchange exchange) throws IOException {
+        sendMethodNotAllowed("Метод отправки не разрешен", exchange);
+    }
+
+    protected void requestDelete(String[] pathParts, HttpExchange exchange) throws IOException {
+        sendMethodNotAllowed("Метод отправки не разрешен", exchange);
     }
 }
