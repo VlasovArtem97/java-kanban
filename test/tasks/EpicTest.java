@@ -49,8 +49,6 @@ class EpicTest {
         taskManager.updateSubTask(subTaskOne);
         taskManager.updateSubTask(subTaskTwo);
         taskManager.updateSubTask(subTaskThree);
-        System.out.println(taskManager.getListEpic());
-        System.out.println(subTaskOne);
         Assertions.assertEquals(Status.DONE, epic1.getStatus(), "Статус Epic задачи не изменился на DONE");
         subTask1.setStatus(Status.NEW);
         taskManager.updateSubTask(subTask1);

@@ -1,5 +1,4 @@
 id,type,name,status,description,startTime,duration,epic 
-1,TASK,Задача Task 1,NEW,Описание задачи Task 1,24.03.29|12:00:00,60
 2,EPIC,Epic 1,NEW,Описание 1 Epic задачи,24.03.29|13:00:00,180,
 3,EPIC,Epic 2,NEW,Описание 2 Epic задачи,null,0,
 4,SUBTASK,SubTask 1,NEW,Описание subTask 1,24.03.29|13:00:00,60,2
